@@ -3,17 +3,19 @@ import os
 
 app = Flask(__name__)
 
-DATA_FILE = "data.txt"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_FILE = os.path.join(BASE_DIR, "data.txt")
 
-# Load data
 def load_data():
     data = {}
-    if os.path.exists(DATA_FILE):
+    try:
         with open(DATA_FILE, "r", encoding="utf-8") as file:
             for line in file:
                 parts = line.strip().split(":")
                 if len(parts) == 2:
                     data[parts[0].lower()] = parts[1]
+    except:
+        print("data.txt not found or error reading file")
     return data
 
 @app.route("/", methods=["GET", "POST"])
@@ -22,7 +24,7 @@ def home():
     data = load_data()
 
     if request.method == "POST":
-        user = request.form["question"].lower()
+        user = request.form.get("question", "").lower()
 
         best_match = None
         for key in data:
