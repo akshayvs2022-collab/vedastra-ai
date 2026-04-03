@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 import os
 
 app = Flask(__name__)
@@ -28,7 +28,6 @@ def home():
 
         if user in ["hi", "hello", "hey"]:
             response = "Hello 👋 I am Vedastra AI!"
-
         else:
             best_match = None
 
@@ -46,6 +45,8 @@ def home():
 
         chat_history.append(("user", user))
         chat_history.append(("ai", response))
+
+        return redirect("/")   # ✅ correct indent
 
     return render_template("index.html", chat_history=chat_history)
 
