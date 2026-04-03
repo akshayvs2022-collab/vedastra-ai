@@ -24,31 +24,28 @@ def home():
     data = load_data()
 
     if request.method == "POST":
-    user = request.form.get("question", "").lower()
+        user = request.form.get("question", "").lower()
 
-    # 👇 Step 1: basic greetings
-    if user in ["hi", "hello", "hey"]:
-        response = "Hello 👋 I am Vedastra AI!"
+        if user in ["hi", "hello", "hey"]:
+            response = "Hello 👋 I am Vedastra AI!"
 
-    else:
-        # 👇 Step 2: your existing AI logic
-        best_match = None
-
-        for key in data:
-            if key == user:
-                best_match = key
-                break
-            elif key in user:
-                best_match = key
-
-        if best_match:
-            response = data[best_match]
         else:
-            response = "I don't understand 😅"
+            best_match = None
 
-    # 👇 Step 3: store chat
-    chat_history.append(("user", user))
-    chat_history.append(("ai", response))
+            for key in data:
+                if key == user:
+                    best_match = key
+                    break
+                elif key in user:
+                    best_match = key
+
+            if best_match:
+                response = data[best_match]
+            else:
+                response = "I don't understand 😅"
+
+        chat_history.append(("user", user))
+        chat_history.append(("ai", response))
 
     return render_template("index.html", chat_history=chat_history)
 
