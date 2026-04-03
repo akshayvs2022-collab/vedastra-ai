@@ -5,7 +5,9 @@ app = Flask(__name__)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_FILE = os.path.join(BASE_DIR, "data.txt")
+CHAT_FILE = os.path.join(BASE_DIR, "chat.txt")   # 🔥 new
 
+# Load AI data
 def load_data():
     data = {}
     if os.path.exists(DATA_FILE):
@@ -16,7 +18,24 @@ def load_data():
                     data[parts[0].lower()] = parts[1]
     return data
 
-chat_history = []   # 🔥 store conversation
+# 🔥 Load chat history from file
+def load_chat():
+    history = []
+    if os.path.exists(CHAT_FILE):
+        with open(CHAT_FILE, "r", encoding="utf-8") as file:
+            for line in file:
+                if "||" in line:
+                    sender, message = line.strip().split("||", 1)
+                    history.append((sender, message))
+    return history
+
+# 🔥 Save chat to file
+def save_chat(sender, message):
+    with open(CHAT_FILE, "a", encoding="utf-8") as file:
+        file.write(f"{sender}||{message}\n")
+
+# 🔥 load existing chat
+chat_history = load_chat()
 
 @app.route("/", methods=["GET", "POST"])
 def home():
@@ -43,10 +62,14 @@ def home():
             else:
                 response = "I don't understand 😅"
 
+        # 🔥 Save both in memory + file
         chat_history.append(("user", user))
-        chat_history.append(("ai", response))
+        save_chat("user", user)
 
-        return redirect("/")   # ✅ correct indent
+        chat_history.append(("ai", response))
+        save_chat("ai", response)
+
+        return redirect("/")
 
     return render_template("index.html", chat_history=chat_history)
 
