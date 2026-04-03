@@ -77,10 +77,19 @@
     </div>
 
     <form method="post">
-        <input type="text" name="question" placeholder="Type your message..." required>
+        <input type="text" id="userInput" name="question" placeholder="Type your message..." required>
         <button type="submit">Send</button>
     </form>
 </div>
+<script>
+    window.onload = function() {
+        var chatBox = document.querySelector(".chat-box");
+        chatBox.scrollTop = chatBox.scrollHeight;
 
+        var input = document.getElementById("userInput");
+        input.value = "";
+        input.focus();   // 🔥 auto focus
+    };
+</script>
 </body>
 </html>
