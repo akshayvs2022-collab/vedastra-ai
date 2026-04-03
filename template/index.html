@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vedastra AI</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #0f172a;
+            color: white;
+            text-align: center;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        input {
+            width: 300px;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        button {
+            padding: 10px 15px;
+            background: #22c55e;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .chat-box {
+            margin-top: 20px;
+            background: #1e293b;
+            padding: 15px;
+            border-radius: 10px;
+            width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>🤖 Vedastra AI</h2>
+
+        <form method="post">
+            <input type="text" name="question" placeholder="Ask something...">
+            <button type="submit">Send</button>
+        </form>
+
+        <div class="chat-box">
+            <p><b>AI:</b> {{ response }}</p>
+        </div>
+    </div>
+
+</body>
+</html>
