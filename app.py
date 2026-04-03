@@ -8,19 +8,19 @@ DATA_FILE = os.path.join(BASE_DIR, "data.txt")
 
 def load_data():
     data = {}
-    try:
+    if os.path.exists(DATA_FILE):
         with open(DATA_FILE, "r", encoding="utf-8") as file:
             for line in file:
                 parts = line.strip().split(":")
                 if len(parts) == 2:
                     data[parts[0].lower()] = parts[1]
-    except:
-        print("data.txt not found or error reading file")
     return data
+
+chat_history = []   # 🔥 store conversation
 
 @app.route("/", methods=["GET", "POST"])
 def home():
-    response = ""
+    global chat_history
     data = load_data()
 
     if request.method == "POST":
@@ -39,7 +39,11 @@ def home():
         else:
             response = "I don't understand 😅"
 
-    return render_template("index.html", response=response)
+        # 🔥 store both user + AI message
+        chat_history.append(("user", user))
+        chat_history.append(("ai", response))
+
+    return render_template("index.html", chat_history=chat_history)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
