@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, jsonify
 import os
 
 app = Flask(__name__)
@@ -62,7 +62,6 @@ def home():
             else:
                 response = "I don't understand 😅"
 
-        # 🔥 Save both in memory + file
         chat_history.append(("user", user))
         save_chat("user", user)
 
@@ -73,5 +72,36 @@ def home():
 
     return render_template("index.html", chat_history=chat_history)
 
+
+# 🔥 API ROUTE (OUTSIDE function)
+@app.route("/api/chat", methods=["POST"])
+def api_chat():
+    data = request.json
+    user = data.get("message", "").lower()
+
+    data_db = load_data()
+
+    if user in ["hi", "hello", "hey"]:
+        response = "Hello 👋 I am Vedastra AI!"
+    else:
+        best_match = None
+
+        for key in data_db:
+            if key == user:
+                best_match = key
+                break
+            elif key in user:
+                best_match = key
+
+        if best_match:
+            response = data_db[best_match]
+        else:
+            response = "I don't understand 😅"
+
+    return jsonify({
+        "user": user,
+        "response": response
+    })
+	
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
