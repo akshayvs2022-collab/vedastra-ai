@@ -1,3 +1,4 @@
+API_KEY = "vedastra123"   # 🔐 your secret key
 from flask import Flask, render_template, request, redirect, jsonify
 import os
 
@@ -36,7 +37,6 @@ def save_chat(sender, message):
 
 # 🔥 load existing chat
 chat_history = load_chat()
-
 @app.route("/", methods=["GET", "POST"])
 def home():
     global chat_history
@@ -71,11 +71,16 @@ def home():
         return redirect("/")
 
     return render_template("index.html", chat_history=chat_history)
-
-
-# 🔥 API ROUTE (OUTSIDE function)
 @app.route("/api/chat", methods=["POST"])
 def api_chat():
+    api_key = request.args.get("api_key")
+
+    # 🔐 check key
+    if api_key != API_KEY:
+        return jsonify({
+            "error": "Unauthorized ❌"
+        }), 401
+
     data = request.json
     user = data.get("message", "").lower()
 
@@ -102,6 +107,6 @@ def api_chat():
         "user": user,
         "response": response
     })
-	
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
