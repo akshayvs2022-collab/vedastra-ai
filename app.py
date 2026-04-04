@@ -64,8 +64,8 @@ def home():
             if best_match:
                 response = data[best_match]
             else:
-    		X = vectorizer.transform([user])
-    		response = model.predict(X)[0]
+    X = vectorizer.transform([user])
+    response = model.predict(X)[0]
 
         chat_history.append(("user", user))
         save_chat("user", user)
