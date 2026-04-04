@@ -1,5 +1,6 @@
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
+import pickle
 
 # Training data
 questions = [
@@ -24,9 +25,8 @@ X = vectorizer.fit_transform(questions)
 model = MultinomialNB()
 model.fit(X, answers)
 
-# Save model
-import pickle
+# Save model files
 pickle.dump(model, open("model.pkl", "wb"))
 pickle.dump(vectorizer, open("vectorizer.pkl", "wb"))
 
-print("Model trained ✅")
+print("Model trained and saved ✅")
