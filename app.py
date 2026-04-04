@@ -1,3 +1,7 @@
+import pickle
+
+model = pickle.load(open("model.pkl", "rb"))
+vectorizer = pickle.load(open("vectorizer.pkl", "rb"))
 API_KEY = "vedastra123"   # 🔐 your secret key
 from flask import Flask, render_template, request, redirect, jsonify
 import os
@@ -60,7 +64,8 @@ def home():
             if best_match:
                 response = data[best_match]
             else:
-                response = "I don't understand 😅"
+    		X = vectorizer.transform([user])
+    		response = model.predict(X)[0]
 
         chat_history.append(("user", user))
         save_chat("user", user)
